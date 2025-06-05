@@ -2,14 +2,22 @@
   <q-page class="q-pa-md bg-grey-2">
     <TopHeader @toggle-drawer="toggleDrawer" />
     <RandomButton @random-click="goToRandom" />
-    <CategoryButtonSlider @go-to-category="goToCategory" class="q-mb-lg q-mt-md" />
+    <CategoryButtonSlider
+      :categories="categories"
+      @go-to-category="goToCategory"
+      class="q-mb-lg q-mt-md"
+    />
     <FavoritesHeader @view-all="goToCategories" />
-    <CategorySlider :categories="categories" @go-to-category="goToCategory" class="q-mt-xl" />
+    <CategorySlider
+      :categories="categories"
+      @go-to-category="goToCategory"
+      class="q-mt-xl"
+    />
   </q-page>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import TopHeader from '../components/TopHeader.vue'
@@ -18,15 +26,17 @@ import FavoritesHeader from '../components/FavoritesHeader.vue'
 import CategorySlider from '../components/CategorySlider.vue'
 import CategoryButtonSlider from '../components/CategoryButtonSlider.vue'
 
+import categoryData from 'src/assets/categories_data.json' 
 const router = useRouter()
+const categories = ref([])
 
-const categories = ref([
-  { id: 1, name: 'Obitelj', image:'/symbols/baby.svg'},
-  { id: 2, name: 'Životinje',  image:'/symbols/girl.svg' },
-  { id: 3, name: 'Vozila', image:'/symbols/mom.svg'},
-  { id: 4, name: 'Hrana', image:'/symbols/dad.svg' },
-  { id: 5, name: 'Dijelovi tijela', image:'/symbols/friend.svg' }
-])
+onMounted(() => {
+  categories.value = categoryData.map(cat => ({
+    id: cat.id,
+    name: cat.translations.hr || cat.category,
+    image: `/src/assets/${cat.image}`,  // ili gde ti slike stoje
+  }))
+})
 
 function goToRandom() {
   router.push('/random-game')
@@ -37,6 +47,7 @@ function goToCategories() {
 }
 
 function goToCategory(id) {
+  console.log('Going to category with ID:', id)
   router.push(`/category-all/${id}`)
 }
 
@@ -45,9 +56,5 @@ function toggleDrawer() {
 }
 </script>
 
-<style scoped>
-.q-page {
-  max-width: 900px;
-  margin: 0 auto;
-}
-</style>
+
+<style scoped lang="scss" src="../css/index.scss"></style>
