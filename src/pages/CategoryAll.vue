@@ -1,6 +1,30 @@
 <template>
   <q-page class="q-pa-md bg-grey-2">
+
+
+
+    <!-- Gornji header s hamburger ikonom -->
+
     <TopHeader @toggle-drawer="toggleDrawer" />
+
+    <!-- Top bar s hamburgerom i searchom, ako je potreban hamburger kao u demu -->
+    <div class="top-bar row items-center justify-between q-mx-auto">
+      <q-btn
+        dense
+        flat
+        round
+        icon="menu"
+        aria-label="Meni"
+        @click="$emit('toggle-drawer')"
+      />
+      <div class="search-center row items-center">
+        <q-icon name="search" size="20px" class="q-mr-sm" />
+        <span class="search-text">Pretraži</span>
+      </div>
+
+      <div style="width: 40px;"></div>
+    </div>
+
 
     <CategorySearch v-model="search" />
 
@@ -56,4 +80,6 @@ function toggleDrawer() {
 }
 </script>
 
+
 <style scoped lang="scss" src="../css/categoryAll.scss"></style>
+
